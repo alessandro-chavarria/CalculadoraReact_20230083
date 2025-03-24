@@ -1,86 +1,99 @@
 import React, { useState } from 'react';
-import './Calculator.css'; 
 
 function Calculator() {
-  const [numero1, setNumero1] = useState('');
-  const [numero2, setNumero2] = useState('');
-  const [resultado, setResultado] = useState(null);
-  const [operacion, setOperacion] = useState('suma'); 
+  const [num1, setNum1] = useState('');
+  const [num2, setNum2] = useState('');
+  const [result, setResult] = useState('');
+  const [operation, setOperation] = useState('suma');
 
-  const handleCalcular = () => {
-    const num1 = parseFloat(numero1);
-    const num2 = parseFloat(numero2);
-    
-    if (isNaN(num1) || isNaN(num2)) {
+  const calculateResult = () => {
+    const a = parseFloat(num1);
+    const b = parseFloat(num2);
+
+    if (isNaN(a) || isNaN(b)) {
       alert('Por favor, ingrese números válidos');
       return;
     }
-    
-    let result;
-    switch(operacion) {
+
+    switch (operation) {
       case 'suma':
-        result = num1 + num2;
+        setResult((a + b).toString());
         break;
       case 'resta':
-        result = num1 - num2;
+        setResult((a - b).toString());
         break;
       case 'multiplicacion':
-        result = num1 * num2;
+        setResult((a * b).toString());
         break;
       case 'division':
-        if (num2 === 0) {
+        if (b === 0) {
           alert('No se puede dividir por cero');
           return;
         }
-        result = num1 / num2;
+        setResult((a / b).toString());
         break;
       default:
-        result = num1 + num2;
+        break;
     }
-    
-    setResultado(result);
+  };
+
+  const clearFields = () => {
+    setNum1('');
+    setNum2('');
+    setResult('');
+    setOperation('suma');
   };
 
   return (
-    <div className="calculadora-container">
-      <h1>Calculadora</h1>
-      
+    <div className="calculator-container">
+      <h2>Calculadora</h2>
       <div className="input-group">
-        <label>Numero 1:</label>
         <input 
           type="number" 
-          value={numero1} 
-          onChange={(e) => setNumero1(e.target.value)}
+          value={num1} 
+          onChange={(e) => setNum1(e.target.value)}
+          placeholder="Número 1"
         />
-      </div>
-      
-      <div className="input-group">
-        <label>Numero 2:</label>
         <input 
           type="number" 
-          value={numero2} 
-          onChange={(e) => setNumero2(e.target.value)}
+          value={num2} 
+          onChange={(e) => setNum2(e.target.value)}
+          placeholder="Número 2"
         />
       </div>
-      
-      <div className="input-group">
-        <label>Operación:</label>
-        <select 
-          value={operacion} 
-          onChange={(e) => setOperacion(e.target.value)}
+      <div className="operation-buttons">
+        <button 
+          className={operation === 'suma' ? 'active' : ''} 
+          onClick={() => setOperation('suma')}
         >
-          <option value="suma">Suma</option>
-          <option value="resta">Resta</option>
-          <option value="multiplicacion">Multiplicación</option>
-          <option value="division">División</option>
-        </select>
+          +
+        </button>
+        <button 
+          className={operation === 'resta' ? 'active' : ''} 
+          onClick={() => setOperation('resta')}
+        >
+          -
+        </button>
+        <button 
+          className={operation === 'multiplicacion' ? 'active' : ''} 
+          onClick={() => setOperation('multiplicacion')}
+        >
+          ×
+        </button>
+        <button 
+          className={operation === 'division' ? 'active' : ''} 
+          onClick={() => setOperation('division')}
+        >
+          ÷
+        </button>
       </div>
-      
-      <button onClick={handleCalcular}>Calcular</button>
-      
-      {resultado !== null && (
-        <div className="resultado">
-          <h2>Resultado: {resultado}</h2>
+      <div className="action-buttons">
+        <button onClick={calculateResult}>Calcular</button>
+        <button onClick={clearFields}>Limpiar</button>
+      </div>
+      {result && (
+        <div className="result">
+          <p>Resultado: {result}</p>
         </div>
       )}
     </div>
